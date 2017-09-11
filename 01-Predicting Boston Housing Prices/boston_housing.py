@@ -22,7 +22,7 @@
 # 
 # Run the code cell below to load the Boston housing dataset, along with a few of the necessary Python libraries required for this project. You will know the dataset loaded successfully if the size of the dataset is reported.
 
-# In[2]:
+# In[1]:
 
 # Import libraries necessary for this project
 import numpy as np
@@ -56,7 +56,7 @@ print ("Boston housing dataset has {} data points with {} variables each.".forma
 # - Calculate the minimum, maximum, mean, median, and standard deviation of `'MEDV'`, which is stored in `prices`.
 #   - Store each calculation in their respective variable.
 
-# In[3]:
+# In[2]:
 
 # TODO: Minimum price of the data
 minimum_price = np.min(prices)
@@ -116,7 +116,7 @@ print ("Standard deviation of prices: ${:,.2f}".format(std_price))
 # - Use `r2_score` from `sklearn.metrics` to perform a performance calculation between `y_true` and `y_predict`.
 # - Assign the performance score to the `score` variable.
 
-# In[4]:
+# In[3]:
 
 # TODO: Import 'r2_score'
 from sklearn.metrics import r2_score
@@ -145,7 +145,7 @@ def performance_metric(y_true, y_predict):
 # 
 # Run the code cell below to use the `performance_metric` function and calculate this model's coefficient of determination.
 
-# In[5]:
+# In[4]:
 
 # Calculate the performance of this model
 score = performance_metric([3, -0.5, 2, 7, 4.2], [2.5, 0.0, 2.1, 7.8, 5.3])
@@ -174,12 +174,12 @@ print ("Model has a coefficient of determination, R^2, of {:.3f}.".format(score)
 #   - Set the `random_state` for `train_test_split` to a value of your choice. This ensures results are consistent.
 # - Assign the train and testing splits to `X_train`, `X_test`, `y_train`, and `y_test`.
 
-# In[6]:
+# In[5]:
 
 # TODO: Import 'train_test_split'
 from sklearn.cross_validation import train_test_split
 # TODO: Shuffle and split the data into training and testing subsets
-X_train, X_test, y_train, y_test = train_test_split(features, prices, test_size = 0.2)
+X_train, X_test, y_train, y_test = train_test_split(features, prices, test_size = 0.2, random_state = 0)
 
 # Success
 print ("Training and testing split was successful.")
@@ -205,7 +205,7 @@ print ("Training and testing split was successful.")
 # 
 # Run the code cell below and use these graphs to answer the following question.
 
-# In[7]:
+# In[6]:
 
 # Produce learning curves for varying training set sizes and maximum depths
 vs.ModelLearning(features, prices)
@@ -229,7 +229,7 @@ vs.ModelLearning(features, prices)
 # 
 # ** Run the code cell below and use this graph to answer the following two questions Q5 and Q6. **
 
-# In[8]:
+# In[7]:
 
 vs.ModelComplexity(X_train, y_train)
 
@@ -242,8 +242,8 @@ vs.ModelComplexity(X_train, y_train)
 
 # **Answer: **
 # 
-# - When the model is trained with a maximum depth of 1, the model suffers from **high bias**.
-# - When the model is trained with a maximum depth of 10, the model suffers from **high variance**. We can conclude it from the trend of decreasing in the score of the validation set when the maximum depth is increasing.
+# - When the model is trained with a maximum depth of 1, the model suffers from **high bias**. We can conclude it from the graph showing that both training score and validation score are really low.
+# - When the model is trained with a maximum depth of 10, the model suffers from **high variance**. The graph shows that when the maximum depth is 10, the training score is really high but the validation score is relatively low and shows a trend of decreasing when the maximum depth is increasing.
 
 # ### Question 6 - Best-Guess Optimal Model
 # * Which maximum depth do you think results in a model that best generalizes to unseen data? 
@@ -307,7 +307,7 @@ vs.ModelComplexity(X_train, y_train)
 #   - Pass the variables `'regressor'`, `'params'`, `'scoring_fnc'`, and `'cv_sets'` as parameters to the object. 
 #   - Assign the `GridSearchCV` object to the `'grid'` variable.
 
-# In[9]:
+# In[8]:
 
 # TODO: Import 'make_scorer', 'DecisionTreeRegressor', and 'GridSearchCV'
 from sklearn.tree import DecisionTreeRegressor
@@ -352,7 +352,7 @@ def fit_model(X, y):
 # 
 # Run the code block below to fit the decision tree regressor to the training data and produce an optimal model.
 
-# In[25]:
+# In[9]:
 
 # Fit the training data to the model using grid search
 reg = fit_model(X_train, y_train)
@@ -363,7 +363,7 @@ print ("Parameter 'max_depth' is {} for the optimal model.".format(reg.get_param
 
 # ** Hint: ** The answer comes from the output of the code snipped above.
 # 
-# **Answer: ** The optimal model has a maximum depth of 5, and my guess in Question 6 is 3. The results are different.
+# **Answer: ** The optimal model has a maximum depth of 4, and my guess in Question 6 is 3. The results are different.
 
 # ### Question 10 - Predicting Selling Prices
 # Imagine that you were a real estate agent in the Boston area looking to use this model to help price homes owned by your clients that they wish to sell. You have collected the following information from three of your clients:
@@ -381,7 +381,7 @@ print ("Parameter 'max_depth' is {} for the optimal model.".format(reg.get_param
 # 
 # Run the code block below to have your optimized model make predictions for each client's home.
 
-# In[27]:
+# In[10]:
 
 # Produce a matrix for client data
 client_data = [[5, 17, 15], # Client 1
@@ -395,16 +395,33 @@ for i, price in enumerate(reg.predict(client_data)):
 
 # **Answer: **
 # 
-# - For client 1, I recommend him/her selling his/her house at \$420190, because the house's metrics are at an intermediate level of all the houses in the dataset, so the price will be around the median price of the house in the dataset.
-# - For client 2, I recommend him/her selling his/her house at \$208490, because the house's metrics are at a relatively low level of all the houses in the dataset, so the price will be apparently lower than the median price of the house in the dataset.
-# - For client 3, I recommend him/her selling his/her house at \$892850, because the house's metrics are at a very high level of all the houses in the dataset, so the price will be nearly the maximum price of the house in the dataset.
+# - For client 1, I recommend him/her selling his/her house at \$391,183.33, because the house's metrics are at an intermediate level of all the houses in the dataset, so the price will be around the median price of the house in the dataset.
+# - For client 2, I recommend him/her selling his/her house at \$189,123.53, because the house's metrics are at a relatively low level of all the houses in the dataset, so the price will be apparently lower than the median price of the house in the dataset.
+# - For client 3, I recommend him/her selling his/her house at \$942,666.67, because the house's metrics are at a very high level of all the houses in the dataset, so the price will be nearly the maximum price of the house in the dataset.
+# 
+# We can use 3 boxplots to show the position of each client's house in terms of each feature.
+
+# In[11]:
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(20, 5))
+y_ax = [[3,9],[0,40],[11,23]]
+for i, col in enumerate(features.columns):
+    plt.subplot(1, 3, i+1)
+    plt.boxplot(data[col])
+    plt.title(col)
+    for j in range(3):
+        plt.plot(1, client_data[j][i], marker="o")
+        plt.annotate('Client '+str(j+1), xy=(1,client_data[j][i]))
+        plt.ylim(y_ax[i])
+
 
 # ### Sensitivity
 # An optimal model is not necessarily a robust model. Sometimes, a model is either too complex or too simple to sufficiently generalize to new data. Sometimes, a model could use a learning algorithm that is not appropriate for the structure of the data given. Other times, the data itself could be too noisy or contain too few samples to allow a model to adequately capture the target variable — i.e., the model is underfitted. 
 # 
 # **Run the code cell below to run the `fit_model` function ten times with different training and testing sets to see how the prediction for a specific client changes with respect to the data it's trained on.**
 
-# In[28]:
+# In[12]:
 
 vs.PredictTrials(features, prices, fit_model, client_data)
 
@@ -430,23 +447,3 @@ vs.PredictTrials(features, prices, fit_model, client_data)
 
 # > **Note**: Once you have completed all of the code implementations and successfully answered each question above, you may finalize your work by exporting the iPython Notebook as an HTML document. You can do this by using the menu above and navigating to  
 # **File -> Download as -> HTML (.html)**. Include the finished document along with this notebook as your submission.
-
-# In[13]:
-
-from sklearn.model_selection import KFold
-X = np.array([[1, 2, 3], [3, 4, 5], [1, 2, 3], [3, 4, 5], [1,2,3], [3,4,5]])
-y = np.array([1, 2, 3, 4, 5, 6])
-kf = KFold(n_splits=2)
-kf.get_n_splits(X)
-print(kf)  
-KFold(n_splits=2, random_state=None, shuffle=False)
-for train_index, test_index in kf.split(X):
-    print("TRAIN:", train_index, "TEST:", test_index)
-    X_train, X_test = X[train_index], X[test_index]
-    y_train, y_test = y[train_index], y[test_index]
-
-
-# In[ ]:
-
-
-
